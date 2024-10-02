@@ -1,0 +1,49 @@
+class VacuumCleaner:
+    def __init__(self, rooms, start_position):
+        
+        self.rooms = rooms
+        self.position = start_position  
+        self.cleaned_rooms = 0
+        self.percept_sequence = []  
+
+    def is_dirty(self):
+        
+        return self.rooms[self.position] == 1
+
+    def clean(self):
+       
+        if self.is_dirty():
+            print(f"Cleaning room {self.position + 1}")
+            self.rooms[self.position] = 0
+            self.cleaned_rooms += 1
+
+    def move(self):
+       
+        if self.position < len(self.rooms) - 1:  
+            self.position += 1
+        else:
+            self.position = 0  
+        print(f"Moved to room {self.position + 1}")
+
+    def perceive(self):
+       
+        room_state = "Dirty" if self.is_dirty() else "Clean"
+        percept = (f"Room {self.position + 1}", room_state)
+        self.percept_sequence.append(percept)
+        print(f"Perception: {percept}")
+
+    def run(self, steps):
+        for step in range(steps):
+            print(f"Step {step + 1}:")
+            self.perceive()  
+            self.clean() 
+            self.move() 
+            print(f"Rooms status: {self.rooms}\n")
+
+        print(f"Total cleaned rooms: {self.cleaned_rooms}")
+        print("Percept sequence:", self.percept_sequence)
+
+rooms = [1, 0, 1, 1]  # Room 1 is dirty, Room 2 is clean, Room 3 is dirty, Room 4 is dirty
+
+vacuum = VacuumCleaner(rooms, start_position=0)
+vacuum.run(steps=8)
